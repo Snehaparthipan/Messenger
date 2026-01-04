@@ -1,10 +1,15 @@
 const express=require("express")
 const app=express()
 const cookiPearser=require("cookie-parser")
+const cors=require("cors")
 const connectDB=require("../Backend/src/Config/db")
 const authRoutes=require("../Backend/src/Routes/authRoutes")
 const messageRoutes=require("../Backend/src/Routes/messageRoutes")
 app.use(express.json())
+app.use(cors({
+    origin:"http://localhost:5173",
+    credentials:true
+}))
 app.use(cookiPearser())
 app.use("/api/auth",authRoutes)
 app.use("/api/message",messageRoutes)

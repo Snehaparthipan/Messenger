@@ -1,17 +1,19 @@
 import React, { useEffect } from 'react'
 import Navbar from './Components/Navbar'
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import Home from './Pages/Home'
 import Signup from './Pages/Signup'
 import Login from './Pages/Login'
 import Settings from './Pages/Settings'
 import Profile from './Pages/Profile'
 import { useAuthStore } from './Store/useAuthStore'
+import {Loader} from 'lucide-react'
+import { Toaster } from 'react-hot-toast'
 export default function App() {
     const {authUser,checkAuth,isCheckingAuth}=useAuthStore
 
     useEffect(()=>{
-      checkAuth();
+      checkAuth
     },
     [checkAuth])
 
@@ -26,13 +28,13 @@ export default function App() {
       <Navbar/>
 
       <Routes>
-        <Route path="/"  element={<Home/>} />
-        <Route path="/signup"  element={<Signup/>} />
-        <Route path="/login"  element={<Login/>} />
+        <Route path="/"  element={authUser ? <Home/>: <Navigate to='/login'/>} />
+        <Route path="/signup"  element={!authUser ?<Signup/>: <Navigate to='/'/>} />
+        <Route path="/login"  element={!authUser ?<Login/>: <Navigate to='/'/>} />
         <Route path="/settings"  element={<Settings/>} />
-        <Route path="/profile"  element={<Profile/>} />
+        <Route path="/profile"  element={authUser ? <Profile/>: <Navigate to='/login'/>} />
       </Routes>
-
+      <Toaster/>
     </div>
   )
 }

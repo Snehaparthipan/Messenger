@@ -26,7 +26,8 @@ export default function Signup() {
   const handleSubmit = (e) => {
     e.preventDefault()
     const success=validateForm()
-    if success
+    if(success===true)signup(formData)
+    
   }
   return (
     <div className='min-h-screen grid lg:grid-cols-2'>

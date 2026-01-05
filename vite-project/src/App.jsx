@@ -9,22 +9,28 @@ import Profile from './Pages/Profile'
 import { useAuthStore } from './Store/useAuthStore'
 import {Loader} from 'lucide-react'
 import { Toaster } from 'react-hot-toast'
+import { useThemeStore } from './Store/useThemeStore'
 export default function App() {
     const {authUser,checkAuth,isCheckingAuth}=useAuthStore()
-
+    const {theme}=useThemeStore()
     useEffect(()=>{
       checkAuth()
     },
     [checkAuth])
 
     console.log({authUser})
-    if(isCheckingAuth  && !authUser) return (
-      <div className='flex items-center justify-center h-screen'>
-        <Loader className="size-10 animate-spin"/>
-      </div>
-    )
+    if (isCheckingAuth && !authUser) {
   return (
-    <div>
+    <div
+      data-theme={theme}
+      className="min-h-screen bg-base-100 flex items-center justify-center"
+    >
+      <Loader className="size-10 animate-spin" />
+    </div>
+  );
+}
+  return (
+    <div data-theme={theme} className="min-h-screen bg-base-100">
       <Navbar/>
 
       <Routes>

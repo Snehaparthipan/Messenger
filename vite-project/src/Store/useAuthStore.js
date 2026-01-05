@@ -1,8 +1,6 @@
 import { create } from "zustand";
 import { axiosInstance } from "../Utills/axios";
 import toast from "react-hot-toast";
-import { Await } from "react-router-dom";
-import axios from "axios";
 
 export const useAuthStore=create((set)=>({
     authUser:null,
@@ -10,6 +8,7 @@ export const useAuthStore=create((set)=>({
     isLoggingIng:false,
     isUpdatingProfile:false,
     isCheckingAuth:true,
+    onlineUsers:[],
     checkAuth:async () => {
         try {
             const res=await axiosInstance.get("/auth/check")

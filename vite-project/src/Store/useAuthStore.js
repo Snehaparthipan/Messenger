@@ -53,7 +53,7 @@ export const useAuthStore=create((set,get)=>({
             set({isLoggingIng:false})
         }
     },
-    logout:async () => {
+    logout:async (data) => {
         try {
             await axiosInstance.post("/auth/logout")
             set({authUser:null})

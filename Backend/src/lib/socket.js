@@ -5,7 +5,7 @@ const app=express()
 const server=http.createServer(app)
 const io=new Server(server,{
     cors:{
-        origin:["https://messenger-n218.vercel.app"],
+        origin:["https://messenger-n218.vercel.app/"],
     }
 })
 

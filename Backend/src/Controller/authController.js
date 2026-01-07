@@ -16,8 +16,8 @@ const signup=async(req,res)=>{
         const salt=await bcrypt.genSalt(10)
         const hashedPassword=await bcrypt.hash(password,salt)
         const newUser=new User({
-            email,
             fullName,
+            email,
             password:hashedPassword
         })
         if(newUser){
@@ -25,8 +25,8 @@ const signup=async(req,res)=>{
             await newUser.save()
             res.status(201).json({
                 _id:newUser._id,
-                email:newUser.email,
                 fullName:newUser.fullName,
+                email:newUser.email,
                 profilePic:newUser.profilePic,
             })
         }
@@ -40,7 +40,6 @@ const signup=async(req,res)=>{
 }
 const login=async (req,res)=>{
     const{email, password}=req.body
-    console.log("LOGIN BODY:", req.body)
     try {
         const user= await User.findOne({email})
         if(!user){

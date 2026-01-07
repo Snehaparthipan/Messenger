@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { axiosInstance } from "../Utills/axios";
 import toast from "react-hot-toast";
 import {io} from 'socket.io-client'
-const BASE_URL="https://messenger-r42b.onrender.com"
+const BASE_URL="http://localhost:5000/"
 export const useAuthStore=create((set,get)=>({
     authUser:null,
     isSignUp:false,
@@ -47,10 +47,7 @@ export const useAuthStore=create((set,get)=>({
 
             get().connectSocket()
         } catch (error) {
-            toast.error(
-  error?.response?.data?.message || "Request failed"
-)
-
+            toast.error(error.response.data.message)
         }
         finally{
             set({isLoggingIng:false})

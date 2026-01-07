@@ -11,21 +11,25 @@ app.set("trust proxy", 1)
 app.use(express.json())
 app.use(cookieParser())
 
-// ✅ CORS (local + deployed frontend)
 const allowedOrigins = [
-  "http://localhost:5174",
-  "https://messenger-n218.vercel.app"
+  "https://messenger-n218.vercel.app",
+  "http://localhost:5174"
 ]
 
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true)
-    } else {
-      callback(new Error("CORS not allowed"))
+  origin: function(origin, callback){
+    // allow requests with no origin like Postman or curl
+    if (!origin) return callback(null, true)
+
+    if (allowedOrigins.indexOf(origin) === -1){
+      console.log("CORS not allowed for origin:", origin)
+      return callback(null, false) // reject CORS without crashing
     }
+    callback(null, true)
   },
-  credentials: true
+  credentials: true,
+  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
+  allowedHeaders: ["Content-Type","Authorization"]
 }))
 
 // ✅ Routes

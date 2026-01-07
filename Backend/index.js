@@ -6,7 +6,7 @@ const connectDB = require("../Backend/src/Config/db")
 const authRoutes = require("../Backend/src/Routes/authRoutes")
 const messageRoutes = require("../Backend/src/Routes/messageRoutes")
 const { app, server } = require("./src/lib/socket")
-
+app.set("trust proxy", 1)
 // ✅ Middlewares
 app.use(express.json())
 app.use(cookieParser())

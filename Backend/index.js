@@ -7,7 +7,7 @@ const messageRoutes=require("../Backend/src/Routes/messageRoutes")
 const {app,server}=require("./src/lib/socket")
 app.use(express.json())
 app.use(cors({
-    origin:"http://localhost:5173",
+    origin:"https://messenger-n218.vercel.app",
     credentials:true
 }))
 app.use(cookiPearser())

@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { axiosInstance } from "../Utills/axios";
 import toast from "react-hot-toast";
 import {io} from 'socket.io-client'
-const BASE_URL="https://messenger-neon-six.vercel.app/"
+const BASE_URL="https://messenger-neon-six.vercel.app"
 export const useAuthStore=create((set,get)=>({
     authUser:null,
     isSignUp:false,

@@ -8,6 +8,9 @@ const io=new Server(server,{
         origin:["http://localhost:5173"],
     }
 })
+function getReceiverSocketId(userId){
+    return userSocketMap[userId]
+}
 
 //used to store online user
 const userSocketMap={}
@@ -29,4 +32,4 @@ io.on("connection",(socket)=>{
 })
 
 
-module.exports={io,app,server}
+module.exports={io,app,server,getReceiverSocketId}

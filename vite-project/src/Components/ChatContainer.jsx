@@ -5,13 +5,24 @@ import MessageInput from './MessageInput'
 import MessageSkleton from '../Skleton/MessageSkleton'
 import { useAuthStore } from '../Store/useAuthStore'
 import { formatMessageTime } from '../Utills/date'
+import { useRef } from 'react'
 
 export default function ChatContainer() {
-    const{message,getMessages,isMesssagesLoading,selectedUser}=useChatStore()
+    const{message,getMessages,isMesssagesLoading,selectedUser,subscribeToMessages,unsubscribeFromMessages}=useChatStore()
     const{authUser}=useAuthStore()
+    const messageEndRef=useRef(null)
     useEffect(()=>{
         getMessages(selectedUser._id)
-    },[selectedUser._id,getMessages])
+        subscribeToMessages()
+        return ()=>unsubscribeFromMessages()
+    },[selectedUser._id,getMessages,subscribeToMessages,unsubscribeFromMessages])
+
+    useEffect(()=>{
+      if(messageEndRef.current && message){
+
+        messageEndRef.current.scrollIntoView({behavior:"smooth"})
+      }
+    },[message])
     if(isMesssagesLoading) return( 
     <div className='flex-1 flex flex-col overflow-auto'>
         <ChatHeader/>
@@ -26,7 +37,8 @@ export default function ChatContainer() {
         {message.map((messages)=>(
           <div
           key={messages._id}
-          className={`chat ${messages.senderId===authUser._id ? "chat-end" :"chat-start"}`}>
+          className={`chat ${messages.senderId===authUser._id ? "chat-end" :"chat-start"}`}
+          ref={messageEndRef}>
             <div className=' chat-image avatar'>
               <div className='size-10 rounded-full border'>
                 <img src={messages.senderId===authUser._id ? authUser.profilePic || "https://cdn-icons-png.flaticon.com/512/12225/12225881.png": selectedUser.profilePic || "https://cdn-icons-png.flaticon.com/512/12225/12225881.png"} alt="profile Pic" />

@@ -2,11 +2,11 @@ import { create } from "zustand";
 import { axiosInstance } from "../Utills/axios";
 import toast from "react-hot-toast";
 import {io} from 'socket.io-client'
-const BASE_URL="http://localhost:5000/"
+const BASE_URL=import.meta.env.MODE==="devlopment" ? "http://localhost:5000/" : "/"
 export const useAuthStore=create((set,get)=>({
     authUser:null,
     isSignUp:false,
-    isLoggingIng:false,
+    isLoggingIn:false,
     isUpdatingProfile:false,
     isCheckingAuth:true,
     onlineUsers:[],
@@ -39,7 +39,7 @@ export const useAuthStore=create((set,get)=>({
         }
     },
     login:async (data) => {
-        set({isLoggingIng:true})
+        set({isLoggingIn:true})
         try {
             const res=await axiosInstance.post("/auth/login",data)
             set({authUser:res.data})
@@ -50,7 +50,7 @@ export const useAuthStore=create((set,get)=>({
             toast.error(error.response.data.message)
         }
         finally{
-            set({isLoggingIng:false})
+            set({isLoggingIn:false})
         }
     },
     logout:async () => {
@@ -70,7 +70,7 @@ export const useAuthStore=create((set,get)=>({
             set({authUser:res.data})
             toast.success("Profile Update Successfully")
         } catch (error) {
-            toast.error(error.response.data.message)
+            toast.error(error)
         }
         finally{
         set({isUpdatingProfile:false})

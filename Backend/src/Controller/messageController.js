@@ -1,6 +1,7 @@
 const User = require("../Model/user.model")
 const Message = require("../Model/message.model")
 const cloudinary = require("cloudinary")
+const { getReceiverSocketId, io }=require("../lib/socket")
 const getUser = async (req, res) => {
     try {
         const loggedInUserId = req.user._id
@@ -53,6 +54,11 @@ const sendMessage = async (req, res) => {
         })
         await newMessage.save()
 
+        //todo: realtime functionality goes here =>socket.io
+        const receiverSocketId=getReceiverSocketId(receiverId)
+        if(receiverSocketId){
+            io.to(receiverSocketId).emit("newMessage",newMessage)
+        }
         res.status(201).json(newMessage)
     } catch (error) {
         console.log("error in Sendmessage controller :", error.message)

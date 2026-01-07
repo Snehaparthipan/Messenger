@@ -15,10 +15,7 @@ const PORT = process.env.PORT || 5000; // 👈 from .env
 app.use(express.json());
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://messenger-n218.vercel.app"
-    ],
+    origin:"https://messenger-n218.vercel.app",
     credentials: true,
   })
 );

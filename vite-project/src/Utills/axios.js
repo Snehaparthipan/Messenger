@@ -1,6 +1,6 @@
 import axios from 'axios'
 
 export const axiosInstance=axios.create({
-    baseURL: "http://localhost:5000/api",
+    baseURL: "https://messenger-neon-six.vercel.app/",
     withCredentials: true
 })

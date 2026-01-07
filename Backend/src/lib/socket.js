@@ -1,32 +1,42 @@
-const {Server} =require("socket.io")
-const http=require("http")
-const express=require("express")
-const app=express()
-const server=http.createServer(app)
-const io=new Server(server,{
-    cors:{
-        origin:["https://messenger-n218.vercel.app/"],
-    }
+const { Server } = require("socket.io")
+const http = require("http")
+const express = require("express")
+
+const app = express()
+
+// 🔥 REQUIRED FOR RENDER (SECURE COOKIES)
+app.set("trust proxy", 1)
+
+const server = http.createServer(app)
+
+const io = new Server(server, {
+  cors: {
+    origin: [
+      "https://messenger-n218.vercel.app",
+      "http://localhost:5174"
+    ],
+    credentials: true
+  }
 })
 
-//used to store online user
-const userSocketMap={}
-io.on("connection",(socket)=>{
-    console.log("A user connected",socket.id)
+// store online users
+const userSocketMap = {}
 
-    const userId=socket.handshake.query.userId
-    if(userId) userSocketMap[userId]=socket.id
+io.on("connection", (socket) => {
+  console.log("A user connected", socket.id)
 
-    //io.emit is used to send events to all the connected clients
-    io.emit("getOnlineUsers",Object.keys(userSocketMap))
+  const userId = socket.handshake.query.userId
+  if (userId) {
+    userSocketMap[userId] = socket.id
+  }
 
+  io.emit("getOnlineUsers", Object.keys(userSocketMap))
 
-    socket.on("disconnect",()=>{
-    console.log("A user disconnected",socket.id)
+  socket.on("disconnect", () => {
+    console.log("A user disconnected", socket.id)
     delete userSocketMap[userId]
-    io.emit("getOnlineUsers",Object.keys(userSocketMap))
-    })
+    io.emit("getOnlineUsers", Object.keys(userSocketMap))
+  })
 })
 
-
-module.exports={io,app,server}
+module.exports = { io, app, server }

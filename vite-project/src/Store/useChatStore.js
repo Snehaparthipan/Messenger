@@ -60,6 +60,7 @@ export const useChatStore=create((set,get)=>({
     ) {
       set({ message: [...message, newMessage] })
     }
+    
   })
 },
 

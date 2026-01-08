@@ -44,22 +44,31 @@ export const useChatStore=create((set,get)=>({
             toast.error(error.response.data.message)
         }
     },
-    subscribeToMessages:async (userId) => {
-        const{selectedUser}=get()
-        if(!selectedUser)return
+    subscribeToMessages: () => {
+  const socket = useAuthStore.getState().socket
+  if (!socket) return
 
-        const socket=useAuthStore.getState().socket
+  socket.off("newMessage") // prevent duplicates
 
-        socket.on("newMessage",(newMessage)=>{
-            const isMessageSentFromUser=newMessage.senderId !==selectedUser._id
-            if(!isMessageSentFromUser)return
-            set({message:[...get().message,newMessage],})
-        })
-    },
-    unsubscribeFromMessages:async (userId) => {
-        const socket=useAuthStore.getState().socket
-        socket.off("newMessage")
-    },
+  socket.on("newMessage", (newMessage) => {
+    const { selectedUser, message } = get()
+    if (!selectedUser) return
+
+    if (
+      newMessage.senderId === selectedUser._id ||
+      newMessage.receiverId === selectedUser._id
+    ) {
+      set({ message: [...message, newMessage] })
+    }
+  })
+},
+
+unsubscribeFromMessages: () => {
+  const socket = useAuthStore.getState().socket
+  if (!socket) return
+  socket.off("newMessage")
+}
+,
     setSelectedUser:async (selectedUser) => {
         set({selectedUser})
     }

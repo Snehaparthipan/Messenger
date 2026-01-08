@@ -6,17 +6,16 @@ export default function Profile() {
   const { authUser, isUpdatingProfile ,updateProfile} = useAuthStore()
   const [selectedIamage,SetselectedIamage]=useState(null)
   const handleImageUpload = async (e) => {
-  const file = e.target.files[0]
-  if (!file) return
-
-  // preview image
-  SetselectedIamage(URL.createObjectURL(file))
-
-  const formData = new FormData()
-  formData.append("profilePic", file)
-
-  await updateProfile(formData)
-}
+    const file = e.target.files[0]
+    if (!file) return
+    const reader=new FileReader();
+    reader.readAsDataURL(file)
+    reader.onload=async () => {
+      const base64Image=reader.result
+      SetselectedIamage(base64Image)
+      await updateProfile({profilePic:base64Image})
+    }
+  }
 
   return (
     <div className="h-screen pt-20">
